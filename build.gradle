@@ -44,6 +44,10 @@ allure {
 tasks.withType(Test).configureEach {
     useJUnitPlatform()
     outputs.upToDateWhen { false }
+    def headless = System.getProperty('selenide.headless')
+    if (headless != null) {
+        systemProperty 'selenide.headless', headless
+    }
     testLogging {
         events 'passed', 'skipped', 'failed', 'standard_out', 'standard_error'
         showStandardStreams = true
