@@ -68,3 +68,9 @@ Menu clicks are a bit different: wait until aria says expanded or the next contr
 Gradle will happily skip tests if it thinks nothing changed. That's wrong when the other end is a live site, so the test tasks always run.
 
 I didnt add extra tags like `sanity`. The class name is enough. `api` vs `ui` is the split that is actually useful.
+
+## CI
+
+CI compiles on every push. The suites are manual because both targets are third-party systems this repo doesn't control.
+
+GitHub runners get a Cloudflare "verify you are human" page on luminor.lv, so the UI test can fail in Actions even when it passes in a normal browser. I fail on that page instead of looking for Site menu on a challenge screen. I dont try to click through it. Run `uiTest` locally.

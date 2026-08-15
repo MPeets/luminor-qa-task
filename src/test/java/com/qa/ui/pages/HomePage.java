@@ -21,7 +21,19 @@ public class HomePage {
 
     public HomePage open() {
         Selenide.open(URL);
+        assertNotBlockedByCloudflare();
         return acceptCookiesIfPresent();
+    }
+
+    private static void assertNotBlockedByCloudflare() {
+        String html = Selenide.webdriver().driver().source();
+        if (html.contains("Performing security verification")
+                || html.contains("Verify you are human")) {
+            throw new IllegalStateException(
+                    "luminor.lv served a Cloudflare challenge instead of the site. "
+                            + "GitHub Actions IPs get this. Run uiTest locally."
+            );
+        }
     }
 
     public HomePage acceptCookiesIfPresent() {
