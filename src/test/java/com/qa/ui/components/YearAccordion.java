@@ -16,7 +16,7 @@ public class YearAccordion {
 
     public YearAccordion(String year) {
         this.year = year;
-        this.title = $$(byRole("button", year)).filter(visible).first();
+        this.title = $$(byRole("button", year)).find(visible);
     }
 
     public YearAccordion shouldBeOpen() {
@@ -26,7 +26,7 @@ public class YearAccordion {
     }
 
     public YearAccordion shouldHaveReportLink() {
-        SelenideElement report = reportLinks().filter(visible).first();
+        SelenideElement report = reportLinks().find(visible);
         report.shouldBe(visible);
         report.shouldHave(attribute("href"));
         return this;

@@ -33,7 +33,7 @@ UI runs headless Chrome by default. To watch it:
 
 Windows: `gradlew.bat uiTest -Dselenide.headless=false`
 
-After a run, `./gradlew allureServe` opens the report. I pinned Allure to 2.34.1 because Allure 3 showed an empty report even tho the results were sitting there.
+After a run, `./gradlew allureServe` opens the report. I pinned Allure to 2.34.1 because Allure 3 showed an empty report even tho the results were sitting there. `allureReport` is a single HTML file so a download from Actions actually opens; the usual folder of JSON files just sits on Loading... in the browser.
 
 `./gradlew test` also picks up a tiny smoke test from when I wired JUnit. `apiTest` / `uiTest` are the ones that matter.
 
@@ -57,7 +57,7 @@ One test, as asked: open the English site, hamburger (top right), About Us, Fina
 
 Locators are roles and visible text, not CSS class names. There are two "Site menu" buttons (desktop / mobile) so I take the one that's actually visible at 1920x1080.
 
-Cookie banner: a few possible button labels ("I agree", "Accept All Cookies", etc). Wait a few seconds, click if something shows up, move on if it doesnt.
+Cookie banner is ACCEPT ALL / REJECT ALL / MANAGE COOKIE SETTINGS. I click ACCEPT ALL if it's there. The match is case-insensitive because the accessible name might not be the same all-caps as the CSS. CI is a fresh browser every time so the banner is more likely to actually be there.
 
 The 2026 block starts with `aria-expanded=false` for a beat, then the page sets it to true. That's just load timing, so "open" means wait until aria says true. Selenide polls (`shouldHave`).
 

@@ -7,6 +7,7 @@ import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 @Tag("ui")
 public abstract class BaseUiTest {
@@ -18,6 +19,9 @@ public abstract class BaseUiTest {
                 System.getProperty("selenide.headless", "true")
         );
         Configuration.browserSize = "1920x1080";
+        ChromeOptions chrome = new ChromeOptions();
+        chrome.addArguments("--disable-dev-shm-usage", "--no-sandbox", "--window-size=1920,1080");
+        Configuration.browserCapabilities = chrome;
         Configuration.timeout = 10_000;
         Configuration.pageLoadTimeout = 30_000;
         Configuration.reportsFolder = "build/reports/selenide";

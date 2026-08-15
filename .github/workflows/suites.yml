@@ -14,7 +14,7 @@ jobs:
       - uses: browser-actions/setup-chrome@v2
       - run: chmod +x gradlew
       - run: ./gradlew apiTest uiTest
-      - run: ./gradlew allureReport
+      - run: ./gradlew allureReport --clean
         if: always()
       - uses: actions/upload-artifact@v4
         if: always()

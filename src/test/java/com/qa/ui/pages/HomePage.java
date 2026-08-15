@@ -5,20 +5,17 @@ import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.TimeoutException;
 
 import java.time.Duration;
-import java.util.List;
 
 import static com.codeborne.selenide.Selectors.byRole;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.Wait;
+import static com.codeborne.selenide.TextMatchOptions.fullText;
 
 public class HomePage {
 
     public static final String URL = "https://luminor.lv/en";
-    private static final List<String> COOKIE_BUTTONS = List.of(
-            "I agree",
-            "Accept All Cookies",
-            "Accept All"
-    );
+    private static final SelenideElement ACCEPT_ALL =
+            $(byRole("button", "ACCEPT ALL", fullText().caseInsensitive()));
 
     private final MainMenu menu = new MainMenu();
 
@@ -29,13 +26,10 @@ public class HomePage {
 
     public HomePage acceptCookiesIfPresent() {
         try {
-            Wait().withTimeout(Duration.ofSeconds(5)).until(driver -> {
-                for (String name : COOKIE_BUTTONS) {
-                    SelenideElement button = $(byRole("button", name));
-                    if (button.exists() && button.isDisplayed()) {
-                        button.click();
-                        return true;
-                    }
+            Wait().withTimeout(Duration.ofSeconds(10)).until(driver -> {
+                if (ACCEPT_ALL.exists() && ACCEPT_ALL.isDisplayed()) {
+                    ACCEPT_ALL.click();
+                    return true;
                 }
                 return false;
             });

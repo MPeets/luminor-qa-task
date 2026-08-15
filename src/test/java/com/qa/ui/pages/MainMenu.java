@@ -11,7 +11,7 @@ import static com.codeborne.selenide.Selenide.Wait;
 public class MainMenu {
 
     private final SelenideElement hamburger =
-            $$(byRole("button", "Site menu")).filter(visible).first();
+            $$(byRole("button", "Site menu")).find(visible);
     private final SelenideElement aboutUs = $(byRole("button", "About Us"));
     private final SelenideElement financialReports = $(byRole("link", "Financial Reports"));
 
