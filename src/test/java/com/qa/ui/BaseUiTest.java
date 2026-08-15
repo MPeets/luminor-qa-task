@@ -2,6 +2,8 @@ package com.qa.ui;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
@@ -19,6 +21,9 @@ public abstract class BaseUiTest {
         Configuration.timeout = 10_000;
         Configuration.pageLoadTimeout = 30_000;
         Configuration.reportsFolder = "build/reports/selenide";
+        SelenideLogger.addListener("AllureSelenide", new AllureSelenide()
+                .screenshots(true)
+                .savePageSource(false));
     }
 
     @AfterAll

@@ -3,6 +3,7 @@ package com.qa.api;
 import com.qa.api.client.PetClient;
 import com.qa.api.client.RequestSpecs;
 import com.qa.api.model.Pet;
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
@@ -27,6 +28,7 @@ public abstract class BaseApiTest {
     protected final PetClient petClient = new PetClient(
             new RequestSpecBuilder()
                     .addRequestSpecification(RequestSpecs.json())
+                    .addFilter(new AllureRestAssured())
                     .addFilter(new RequestLoggingFilter())
                     .addFilter(new ResponseLoggingFilter())
                     .build()
