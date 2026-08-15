@@ -1,10 +1,12 @@
 package com.qa.api.data;
 
 import com.qa.api.model.Pet;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Tag("api")
 class PetFactoryTest {
 
     @Test

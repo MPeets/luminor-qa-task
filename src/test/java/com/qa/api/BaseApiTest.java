@@ -8,6 +8,7 @@ import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Tag;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
+@Tag("api")
 public abstract class BaseApiTest {
 
     private static final Duration CONSISTENCY_TIMEOUT = Duration.ofSeconds(10);
