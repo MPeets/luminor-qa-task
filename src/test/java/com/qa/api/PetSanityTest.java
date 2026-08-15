@@ -32,6 +32,9 @@ class PetSanityTest extends BaseApiTest {
         step("Create pet " + pet.getId());
         assertStatus(petClient.create(pet), 200);
 
+        step("Wait until pet " + pet.getId() + " is readable");
+        awaitPetReadable(pet.getId());
+
         step("Retrieve pet " + pet.getId());
         Response response = petClient.getById(pet.getId());
 
@@ -48,6 +51,7 @@ class PetSanityTest extends BaseApiTest {
 
         step("Create pet " + pet.getId());
         assertStatus(petClient.create(pet), 200);
+        awaitPetReadable(pet.getId());
 
         pet.setName("qa-pet-updated-" + pet.getId());
         pet.setStatus(PetStatus.SOLD);
@@ -58,6 +62,9 @@ class PetSanityTest extends BaseApiTest {
         assertThat(updateResponse.as(Pet.class))
                 .extracting(Pet::getName, Pet::getStatus)
                 .containsExactly(pet.getName(), PetStatus.SOLD);
+
+        step("Wait until pet " + pet.getId() + " is readable after update");
+        awaitPetReadable(pet.getId());
 
         step("Retrieve updated pet " + pet.getId());
         Response getResponse = petClient.getById(pet.getId());
@@ -74,11 +81,12 @@ class PetSanityTest extends BaseApiTest {
 
         step("Create pet " + pet.getId());
         assertStatus(petClient.create(pet), 200);
+        awaitPetReadable(pet.getId());
 
         step("Delete pet " + pet.getId());
         assertStatus(petClient.delete(pet.getId()), 200);
 
-        step("Retrieve deleted pet " + pet.getId() + " (expect 404)");
-        assertStatus(petClient.getById(pet.getId()), 404);
+        step("Wait until pet " + pet.getId() + " is gone");
+        awaitPetGone(pet.getId());
     }
 }
