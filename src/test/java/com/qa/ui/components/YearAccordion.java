@@ -8,7 +8,6 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byRole;
 import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.Selenide.Wait;
 
 public class YearAccordion {
 
@@ -22,7 +21,7 @@ public class YearAccordion {
 
     public YearAccordion shouldBeOpen() {
         title.shouldBe(visible);
-        Wait().until(driver -> expanded() || hasVisibleReportLink());
+        title.shouldHave(attribute("aria-expanded", "true"));
         return this;
     }
 
@@ -31,14 +30,6 @@ public class YearAccordion {
         report.shouldBe(visible);
         report.shouldHave(attribute("href"));
         return this;
-    }
-
-    private boolean expanded() {
-        return "true".equalsIgnoreCase(title.getAttribute("aria-expanded"));
-    }
-
-    private boolean hasVisibleReportLink() {
-        return !reportLinks().filter(visible).isEmpty();
     }
 
     private ElementsCollection reportLinks() {
