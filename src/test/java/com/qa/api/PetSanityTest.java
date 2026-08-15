@@ -75,6 +75,14 @@ class PetSanityTest extends BaseApiTest {
     }
 
     @Test
+    void unknownPetIdReturns404() {
+        long unknownId = PetFactory.newId();
+
+        step("Retrieve unknown pet " + unknownId + " (expect 404)");
+        assertStatus(petClient.getById(unknownId), 404);
+    }
+
+    @Test
     void deleteCreatedPet() {
         Pet pet = PetFactory.validPet();
         track(pet.getId());
