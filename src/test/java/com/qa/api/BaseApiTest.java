@@ -7,8 +7,6 @@ import com.qa.api.model.PetStatus;
 import io.qameta.allure.Allure;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
@@ -31,8 +29,6 @@ public abstract class BaseApiTest {
             new RequestSpecBuilder()
                     .addRequestSpecification(RequestSpecs.json())
                     .addFilter(new AllureRestAssured())
-                    .addFilter(new RequestLoggingFilter())
-                    .addFilter(new ResponseLoggingFilter())
                     .build()
     );
     private final PetClient pollClient = new PetClient();
@@ -43,8 +39,6 @@ public abstract class BaseApiTest {
     }
 
     protected static void step(String message) {
-        System.out.println();
-        System.out.println("=== " + message + " ===");
         Allure.step(message);
     }
 

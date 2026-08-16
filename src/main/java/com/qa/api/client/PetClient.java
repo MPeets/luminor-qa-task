@@ -26,6 +26,13 @@ public class PetClient {
                 .post("/pet");
     }
 
+    public Response create(String body) {
+        return given()
+                .spec(spec)
+                .body(body)
+                .post("/pet");
+    }
+
     public Response update(Pet pet) {
         return given()
                 .spec(spec)
@@ -34,6 +41,10 @@ public class PetClient {
     }
 
     public Response getById(long petId) {
+        return getById(Long.toString(petId));
+    }
+
+    public Response getById(String petId) {
         return given()
                 .spec(spec)
                 .pathParam("petId", petId)

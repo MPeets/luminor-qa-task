@@ -1,6 +1,6 @@
 # luminor-qa-task
 
-Take-home for Luminor. Two suites against live systems I dont own:
+Take-home for Luminor. Two suites against live systems I don't own:
 
 - API sanity on the public Petstore (`https://petstore.swagger.io/`)
 - one UI journey on `https://luminor.lv/en`
@@ -33,13 +33,13 @@ UI runs headless Chrome by default. To watch it:
 
 Windows: `gradlew.bat uiTest -Dselenide.headless=false`
 
-After a run, `./gradlew allureServe` opens the report. I pinned Allure to 2.34.1 because Allure 3 showed an empty report even tho the results were sitting there. `allureReport` is a single HTML file so a download from Actions actually opens; the usual folder of JSON files just sits on Loading... in the browser.
+After a run, `./gradlew allureServe` opens the report. I pinned Allure to 2.34.1 because Allure 3 showed an empty report even though the results were sitting there. `allureReport` is a single HTML file so a download from Actions actually opens; the usual folder of JSON files just sits on Loading... in the browser.
 
 `apiTest` / `uiTest` are the ones that matter. API tests run concurrent; client-side ids are why that is safe.
 
 ## API
 
-Create, retrieve, update, delete a pet. Plus a GET of an id I never created, which should 404. After an update to sold, `findByStatus` should list that pet.
+Create, retrieve, update, delete a pet. Plus a GET of an id I never created, which should 404. After an update to sold, `findByStatus` should list that pet. Negative paths that this live API actually enforces: DELETE twice is 404, malformed POST is 400, non-numeric GET is 404.
 
 A few things that are not obvious from the swagger file:
 
@@ -69,7 +69,7 @@ Menu clicks are a bit different: wait until aria says expanded or the next contr
 
 Gradle will happily skip tests if it thinks nothing changed. That's wrong when the other end is a live site, so the test tasks always run.
 
-I didnt add extra tags like `sanity`. The class name is enough. `api` vs `ui` is the split that is actually useful.
+I didn't add extra tags like `sanity`. The class name is enough. `api` vs `ui` is the split that is actually useful.
 
 ## CI
 

@@ -19,6 +19,7 @@ class PetSanityTest extends BaseApiTest {
     @Test
     @DisplayName("Create a pet")
     void createPet() {
+        // POST echoes the body; retrieveCreatedPet is the read-back check.
         Pet pet = PetFactory.validPet();
         track(pet.getId());
 
@@ -142,5 +143,41 @@ class PetSanityTest extends BaseApiTest {
 
         step("Wait until pet " + pet.getId() + " is gone");
         awaitPetGone(pet.getId());
+    }
+
+    @Test
+    @DisplayName("Delete of an already-deleted pet returns 404")
+    void deleteAlreadyDeletedPetReturns404() {
+        Pet pet = PetFactory.validPet();
+        track(pet.getId());
+
+        step("Create and delete pet " + pet.getId());
+        assertStatus(petClient.create(pet), 200);
+        awaitPetReadable(pet.getId());
+        assertStatus(petClient.delete(pet.getId()), 200);
+        awaitPetGone(pet.getId());
+
+        step("Delete pet " + pet.getId() + " again (expect 404)");
+        assertStatus(petClient.delete(pet.getId()), 404);
+    }
+
+    @Test
+    @DisplayName("POST with a malformed body returns 400")
+    void createWithMalformedBodyReturns400() {
+        step("Create pet with malformed JSON (expect 400)");
+        Response response = petClient.create("{not-json");
+
+        assertStatus(response, 400);
+        assertThat(response.as(ApiMessage.class).getMessage()).isEqualTo("bad input");
+    }
+
+    @Test
+    @DisplayName("GET with a non-numeric id returns 404")
+    void getNonNumericIdReturns404() {
+        step("Retrieve pet id 'not-a-number' (expect 404)");
+        Response response = petClient.getById("not-a-number");
+
+        assertStatus(response, 404);
+        assertThat(response.as(ApiMessage.class).getMessage()).contains("NumberFormatException");
     }
 }
