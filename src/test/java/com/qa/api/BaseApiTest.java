@@ -44,7 +44,7 @@ public abstract class BaseApiTest {
 
     protected static void assertStatus(Response response, int statusCode) {
         assertThat(response.statusCode())
-                .as(response.asString())
+                .withFailMessage(response.asString())
                 .isEqualTo(statusCode);
     }
 
