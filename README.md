@@ -59,7 +59,7 @@ Locators are roles and visible text, not CSS class names. There are two "Site me
 
 Cookie banner is ACCEPT ALL / REJECT ALL / MANAGE COOKIE SETTINGS. I click ACCEPT ALL if it's there. The match is case-insensitive because the accessible name might not be the same all-caps as the CSS. CI is a fresh browser every time so the banner is more likely to actually be there.
 
-The 2026 block starts with `aria-expanded=false` for a beat, then the page sets it to true. That's just load timing, so "open" means wait until aria says true. Selenide polls (`shouldHave`).
+The 2026 block starts with `aria-expanded=false` for a beat, then the page sets it to true. That's just load timing, so "open" means wait until aria says true. Selenide polls (`shouldHave`). The report link is searched inside that year's accordion, not the whole page. The button has no `aria-controls` on this site, so I use `data-toggle-accordion` to find the panel. The href has to look like a pdf, not just be present.
 
 Menu clicks are a bit different: wait until aria says expanded or the next control is visible, in case the panel shows up before the attribute does.
 
