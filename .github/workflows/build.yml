@@ -3,7 +3,7 @@ name: build
 on: [push, workflow_dispatch]
 
 jobs:
-  compile:
+  api:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -12,4 +12,4 @@ jobs:
           distribution: temurin
           java-version: '21'
       - run: chmod +x gradlew
-      - run: ./gradlew compileTestJava
+      - run: ./gradlew apiTest

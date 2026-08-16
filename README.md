@@ -73,6 +73,6 @@ I didn't add extra tags like `sanity`. The class name is enough. `api` vs `ui` i
 
 ## CI
 
-CI compiles on every push. The suites are manual because both targets are third-party systems this repo doesn't control.
+CI runs the API suite on every push. The UI suite is manual because GitHub runners get a Cloudflare challenge on luminor.lv. I wait for the real site (or the challenge to stick), then abort with a skip. Red says "the site is broken." I dont try to click through it. Run `uiTest` locally. The check looks for Cloudflare's own markup (`cf-turnstile`, `challenges.cloudflare.com`), not English copy, so lv/ru variants still count.
 
-GitHub runners get a Cloudflare challenge on luminor.lv, so the UI test can be skipped in Actions even when it passes in a normal browser. I wait for the real site (or the challenge to stick), then abort with a skip. Red says "the site is broken." I dont try to click through it. Run `uiTest` locally. The check looks for Cloudflare's own markup (`cf-turnstile`, `challenges.cloudflare.com`), not English copy, so lv/ru variants still count.
+The manual workflow runs both suites with `--continue`, so an API failure still produces a UI result and the Allure zip.
