@@ -2,13 +2,16 @@ package com.qa.ui.pages;
 
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import org.junit.jupiter.api.Assumptions;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
 
 import java.time.Duration;
+import java.util.Locale;
 
 import static com.codeborne.selenide.Selectors.byRole;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.Wait;
 import static com.codeborne.selenide.TextMatchOptions.fullText;
 
@@ -22,19 +25,35 @@ public class HomePage {
 
     public HomePage open() {
         Selenide.open(URL);
-        assertNotBlockedByCloudflare();
+        waitForSiteOrAbortOnCloudflare();
         return acceptCookiesIfPresent();
     }
 
-    private static void assertNotBlockedByCloudflare() {
-        String html = Selenide.webdriver().driver().source();
-        if (html.contains("Performing security verification")
-                || html.contains("Verify you are human")) {
-            throw new IllegalStateException(
-                    "luminor.lv served a Cloudflare challenge instead of the site. "
-                            + "GitHub Actions IPs get this. Run uiTest locally."
-            );
+    private static void waitForSiteOrAbortOnCloudflare() {
+        try {
+            Wait().withTimeout(Duration.ofSeconds(15))
+                    .ignoring(WebDriverException.class)
+                    .until(driver -> siteReady() && !cloudflareChallenge());
+        } catch (TimeoutException e) {
+            if (cloudflareChallenge()) {
+                Assumptions.abort(
+                        "luminor.lv served a Cloudflare challenge - run uiTest locally"
+                );
+            }
         }
+    }
+
+    private static boolean siteReady() {
+        return ACCEPT_ALL.exists()
+                || !$$(byRole("button", "Site menu")).isEmpty();
+    }
+
+    private static boolean cloudflareChallenge() {
+        String html = Selenide.webdriver().driver().source().toLowerCase(Locale.ROOT);
+        return html.contains("cf-turnstile")
+                || html.contains("challenges.cloudflare.com")
+                || html.contains("cdn-cgi/challenge")
+                || html.contains("_cf_chl");
     }
 
     public HomePage acceptCookiesIfPresent() {

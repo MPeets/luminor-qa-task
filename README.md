@@ -73,4 +73,4 @@ I didnt add extra tags like `sanity`. The class name is enough. `api` vs `ui` is
 
 CI compiles on every push. The suites are manual because both targets are third-party systems this repo doesn't control.
 
-GitHub runners get a Cloudflare "verify you are human" page on luminor.lv, so the UI test can fail in Actions even when it passes in a normal browser. I fail on that page instead of looking for Site menu on a challenge screen. I dont try to click through it. Run `uiTest` locally.
+GitHub runners get a Cloudflare challenge on luminor.lv, so the UI test can be skipped in Actions even when it passes in a normal browser. I wait for the real site (or the challenge to stick), then abort with a skip. Red says "the site is broken." I dont try to click through it. Run `uiTest` locally. The check looks for Cloudflare's own markup (`cf-turnstile`, `challenges.cloudflare.com`), not English copy, so lv/ru variants still count.
