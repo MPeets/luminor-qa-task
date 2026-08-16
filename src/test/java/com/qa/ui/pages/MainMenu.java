@@ -1,6 +1,7 @@
 package com.qa.ui.pages;
 
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.WebDriverException;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byRole;
@@ -33,7 +34,8 @@ public class MainMenu {
     }
 
     private static void waitUntilExpandedOrVisible(SelenideElement toggle, SelenideElement content) {
-        Wait().until(driver -> expanded(toggle) || content.is(visible));
+        Wait().ignoring(WebDriverException.class)
+                .until(driver -> expanded(toggle) || content.is(visible));
     }
 
     private static boolean expanded(SelenideElement toggle) {

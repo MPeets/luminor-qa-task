@@ -3,6 +3,7 @@ package com.qa.ui.pages;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriverException;
 
 import java.time.Duration;
 
@@ -38,13 +39,10 @@ public class HomePage {
 
     public HomePage acceptCookiesIfPresent() {
         try {
-            Wait().withTimeout(Duration.ofSeconds(10)).until(driver -> {
-                if (ACCEPT_ALL.exists() && ACCEPT_ALL.isDisplayed()) {
-                    ACCEPT_ALL.click();
-                    return true;
-                }
-                return false;
-            });
+            Wait().withTimeout(Duration.ofSeconds(10))
+                    .ignoring(WebDriverException.class)
+                    .until(driver -> ACCEPT_ALL.exists() && ACCEPT_ALL.isDisplayed());
+            ACCEPT_ALL.click();
         } catch (TimeoutException ignored) {
             // no cookie banner
         }
