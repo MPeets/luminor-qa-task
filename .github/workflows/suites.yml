@@ -12,7 +12,6 @@ jobs:
           distribution: temurin
           java-version: '21'
       - uses: browser-actions/setup-chrome@v2
-      - run: chmod +x gradlew
       - run: ./gradlew apiTest uiTest --continue
       - run: ./gradlew allureReport --clean
         if: always()
