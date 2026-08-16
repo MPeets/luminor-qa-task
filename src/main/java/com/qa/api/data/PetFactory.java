@@ -1,7 +1,9 @@
 package com.qa.api.data;
 
+import com.qa.api.model.Category;
 import com.qa.api.model.Pet;
 import com.qa.api.model.PetStatus;
+import com.qa.api.model.Tag;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -23,7 +25,9 @@ public final class PetFactory {
         return Pet.builder()
                 .id(id)
                 .name("qa-pet-" + id)
+                .category(Category.builder().id(id).name("qa").build())
                 .photoUrls(List.of("https://example.com/qa-pet.png"))
+                .tags(List.of(Tag.builder().id(id).name("sanity").build()))
                 .status(PetStatus.AVAILABLE)
                 .build();
     }

@@ -1,8 +1,11 @@
 package com.qa.api;
 
 import com.qa.api.data.PetFactory;
+import com.qa.api.model.ApiMessage;
+import com.qa.api.model.Category;
 import com.qa.api.model.Pet;
 import com.qa.api.model.PetStatus;
+import com.qa.api.model.Tag;
 import io.qameta.allure.Feature;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
@@ -23,9 +26,16 @@ class PetSanityTest extends BaseApiTest {
         Response response = petClient.create(pet);
 
         assertStatus(response, 200);
-        assertThat(response.as(Pet.class))
+        Pet created = response.as(Pet.class);
+        assertThat(created)
                 .extracting(Pet::getId, Pet::getName, Pet::getStatus)
                 .containsExactly(pet.getId(), pet.getName(), pet.getStatus());
+        assertThat(created.getCategory())
+                .extracting(Category::getId, Category::getName)
+                .containsExactly(pet.getCategory().getId(), pet.getCategory().getName());
+        assertThat(created.getTags())
+                .extracting(Tag::getName)
+                .containsExactly("sanity");
     }
 
     @Test
@@ -81,6 +91,32 @@ class PetSanityTest extends BaseApiTest {
     }
 
     @Test
+    @DisplayName("Updated pet is returned by findByStatus sold")
+    void updatedPetAppearsInFindBySoldStatus() {
+        Pet pet = PetFactory.validPet();
+        track(pet.getId());
+
+        step("Create pet " + pet.getId());
+        assertStatus(petClient.create(pet), 200);
+        awaitPetReadable(pet.getId());
+
+        pet.setStatus(PetStatus.SOLD);
+        step("Update pet " + pet.getId() + " to sold");
+        assertStatus(petClient.update(pet), 200);
+        awaitPetReadable(pet.getId());
+
+        step("Wait until pet " + pet.getId() + " is listed as sold");
+        awaitPetListedByStatus(pet.getId(), PetStatus.SOLD);
+
+        step("Find pets by status sold");
+        Response response = petClient.findByStatus(PetStatus.SOLD);
+        assertStatus(response, 200);
+        assertThat(response.as(Pet[].class))
+                .extracting(Pet::getId)
+                .contains(pet.getId());
+    }
+
+    @Test
     @DisplayName("Unknown pet id returns 404")
     void unknownPetIdReturns404() {
         long unknownId = PetFactory.newId();
@@ -100,7 +136,9 @@ class PetSanityTest extends BaseApiTest {
         awaitPetReadable(pet.getId());
 
         step("Delete pet " + pet.getId());
-        assertStatus(petClient.delete(pet.getId()), 200);
+        Response response = petClient.delete(pet.getId());
+        assertStatus(response, 200);
+        assertThat(response.as(ApiMessage.class).getMessage()).isNotBlank();
 
         step("Wait until pet " + pet.getId() + " is gone");
         awaitPetGone(pet.getId());

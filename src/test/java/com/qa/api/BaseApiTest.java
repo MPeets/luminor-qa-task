@@ -3,6 +3,7 @@ package com.qa.api;
 import com.qa.api.client.PetClient;
 import com.qa.api.client.RequestSpecs;
 import com.qa.api.model.Pet;
+import com.qa.api.model.PetStatus;
 import io.qameta.allure.Allure;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -83,12 +84,19 @@ public abstract class BaseApiTest {
                 .untilAsserted(() -> assertThat(pollClient.getById(petId).statusCode()).isEqualTo(404));
     }
 
+    protected void awaitPetListedByStatus(long petId, PetStatus status) {
+        await("pet " + petId + " listed as " + status.value())
+                .atMost(CONSISTENCY_TIMEOUT)
+                .pollDelay(Duration.ZERO)
+                .pollInterval(POLL_INTERVAL)
+                .untilAsserted(() -> assertThat(pollClient.findByStatus(status).as(Pet[].class))
+                        .extracting(Pet::getId)
+                        .contains(petId));
+    }
+
     @AfterEach
     void deleteTrackedPets() {
-        if (!createdPetIds.isEmpty()) {
-            step("Cleanup pets " + createdPetIds);
-        }
-        createdPetIds.forEach(petClient::delete);
+        createdPetIds.forEach(pollClient::delete);
         createdPetIds.clear();
     }
 }

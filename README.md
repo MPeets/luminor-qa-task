@@ -35,11 +35,11 @@ Windows: `gradlew.bat uiTest -Dselenide.headless=false`
 
 After a run, `./gradlew allureServe` opens the report. I pinned Allure to 2.34.1 because Allure 3 showed an empty report even tho the results were sitting there. `allureReport` is a single HTML file so a download from Actions actually opens; the usual folder of JSON files just sits on Loading... in the browser.
 
-`./gradlew test` also picks up a tiny smoke test from when I wired JUnit. `apiTest` / `uiTest` are the ones that matter.
+`apiTest` / `uiTest` are the ones that matter. API tests run concurrent; client-side ids are why that is safe.
 
 ## API
 
-Create, retrieve, update, delete a pet. Plus a GET of an id I never created, which should 404.
+Create, retrieve, update, delete a pet. Plus a GET of an id I never created, which should 404. After an update to sold, `findByStatus` should list that pet.
 
 A few things that are not obvious from the swagger file:
 
@@ -51,7 +51,7 @@ You also dont always read what you just wrote. POST can come back 200 and the ne
 
 HTTP calls time out after 10s (connect, socket, connection manager). A hung Petstore should fail the test, not hang the build.
 
-Each test tracks the ids it created and deletes them afterwards. A 404 on cleanup is fine, the pet is already gone.
+Each test tracks the ids it created and deletes them afterwards on the quiet client, so cleanup DELETEs do not land in Allure. A 404 on cleanup is fine, the pet is already gone.
 
 ## UI
 
