@@ -24,23 +24,26 @@ public class HomePage {
     private final MainMenu menu = new MainMenu();
 
     public HomePage open() {
-        Selenide.open(URL);
-        waitForSiteOrAbortOnCloudflare();
-        return acceptCookiesIfPresent();
-    }
-
-    private static void waitForSiteOrAbortOnCloudflare() {
         try {
+            Selenide.open(URL);
             Wait().withTimeout(Duration.ofSeconds(15))
                     .ignoring(WebDriverException.class)
                     .until(driver -> siteReady() && !cloudflareChallenge());
         } catch (TimeoutException e) {
-            if (cloudflareChallenge()) {
-                Assumptions.abort(
-                        "luminor.lv served a Cloudflare challenge - run uiTest locally"
-                );
-            }
+            abortIfCloudflare(e);
+        } catch (WebDriverException e) {
+            abortIfCloudflare(e);
         }
+        return acceptCookiesIfPresent();
+    }
+
+    private static void abortIfCloudflare(RuntimeException e) {
+        if (cloudflareChallenge()) {
+            Assumptions.abort(
+                    "luminor.lv served a Cloudflare challenge - run uiTest locally"
+            );
+        }
+        throw e;
     }
 
     private static boolean siteReady() {
