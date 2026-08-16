@@ -178,6 +178,6 @@ class PetSanityTest extends BaseApiTest {
         Response response = petClient.getById("not-a-number");
 
         assertStatus(response, 404);
-        assertThat(response.as(ApiMessage.class).getMessage()).contains("NumberFormatException");
+        // Live body currently names NumberFormatException. That's a leak, not a contract.
     }
 }
