@@ -51,6 +51,10 @@ tasks.withType(Test).configureEach {
     if (headless != null) {
         systemProperty 'selenide.headless', headless
     }
+    def baseUri = System.getProperty('api.baseUri')
+    if (baseUri != null) {
+        systemProperty 'api.baseUri', baseUri
+    }
     testLogging {
         events 'passed', 'skipped', 'failed'
     }
