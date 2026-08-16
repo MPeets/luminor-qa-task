@@ -44,7 +44,12 @@ allure {
     }
 }
 
+def cleanAllureResults = tasks.register('cleanAllureResults', Delete) {
+    delete layout.buildDirectory.dir('allure-results')
+}
+
 tasks.withType(Test).configureEach {
+    dependsOn cleanAllureResults
     useJUnitPlatform()
     outputs.upToDateWhen { false }
     def headless = System.getProperty('selenide.headless')
