@@ -3,6 +3,7 @@ package com.qa.api;
 import com.qa.api.client.PetClient;
 import com.qa.api.client.RequestSpecs;
 import com.qa.api.model.Pet;
+import io.qameta.allure.Allure;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -43,6 +44,7 @@ public abstract class BaseApiTest {
     protected static void step(String message) {
         System.out.println();
         System.out.println("=== " + message + " ===");
+        Allure.step(message);
     }
 
     protected static void assertStatus(Response response, int statusCode) {

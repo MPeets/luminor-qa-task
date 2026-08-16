@@ -3,14 +3,18 @@ package com.qa.api;
 import com.qa.api.data.PetFactory;
 import com.qa.api.model.Pet;
 import com.qa.api.model.PetStatus;
+import io.qameta.allure.Feature;
 import io.restassured.response.Response;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Feature("Petstore")
 class PetSanityTest extends BaseApiTest {
 
     @Test
+    @DisplayName("Create a pet")
     void createPet() {
         Pet pet = PetFactory.validPet();
         track(pet.getId());
@@ -25,6 +29,7 @@ class PetSanityTest extends BaseApiTest {
     }
 
     @Test
+    @DisplayName("Retrieve a created pet")
     void retrieveCreatedPet() {
         Pet pet = PetFactory.validPet();
         track(pet.getId());
@@ -45,6 +50,7 @@ class PetSanityTest extends BaseApiTest {
     }
 
     @Test
+    @DisplayName("Update pet name and status")
     void updatePetDetails() {
         Pet pet = PetFactory.validPet();
         track(pet.getId());
@@ -75,6 +81,7 @@ class PetSanityTest extends BaseApiTest {
     }
 
     @Test
+    @DisplayName("Unknown pet id returns 404")
     void unknownPetIdReturns404() {
         long unknownId = PetFactory.newId();
 
@@ -83,6 +90,7 @@ class PetSanityTest extends BaseApiTest {
     }
 
     @Test
+    @DisplayName("Delete a created pet")
     void deleteCreatedPet() {
         Pet pet = PetFactory.validPet();
         track(pet.getId());
