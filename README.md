@@ -57,7 +57,7 @@ Each test tracks the ids it created and deletes them afterwards. A 404 on cleanu
 
 One test, as asked: open the English site, hamburger (top right), About Us, Financial reports. The 2026 section should already be open and there should be a report link in it.
 
-Locators are roles and visible text, not CSS class names. There are two "Site menu" buttons (desktop / mobile) so I take the one that's actually visible at 1920x1080.
+Locators are roles and visible text, not CSS class names. Desktop and mobile both render Site menu / About Us / Financial Reports, so I take the visible one each time (`.find(visible)`), not the first match in the DOM.
 
 Cookie banner is ACCEPT ALL / REJECT ALL / MANAGE COOKIE SETTINGS. I click ACCEPT ALL if it's there. The match is case-insensitive because the accessible name might not be the same all-caps as the CSS. CI is a fresh browser every time so the banner is more likely to actually be there.
 

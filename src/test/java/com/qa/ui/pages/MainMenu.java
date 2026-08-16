@@ -5,7 +5,6 @@ import org.openqa.selenium.WebDriverException;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byRole;
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.Wait;
 
@@ -13,8 +12,10 @@ public class MainMenu {
 
     private final SelenideElement hamburger =
             $$(byRole("button", "Site menu")).find(visible);
-    private final SelenideElement aboutUs = $(byRole("button", "About Us"));
-    private final SelenideElement financialReports = $(byRole("link", "Financial Reports"));
+    private final SelenideElement aboutUs =
+            $$(byRole("button", "About Us")).find(visible);
+    private final SelenideElement financialReports =
+            $$(byRole("link", "Financial Reports")).find(visible);
 
     public MainMenu open() {
         hamburger.shouldBe(visible).click();
