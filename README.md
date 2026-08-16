@@ -49,6 +49,8 @@ Create returns **200**, not 201. That's what the live API does.
 
 You also dont always read what you just wrote. POST can come back 200 and the next GET is still 404. After DELETE, GET can still be 200 for a bit. I poll until the pet is readable / gone instead of sleeping a fixed time. The polling client is quiet on purpose, otherwise Allure fills up with retry noise.
 
+HTTP calls time out after 10s (connect, socket, connection manager). A hung Petstore should fail the test, not hang the build.
+
 Each test tracks the ids it created and deletes them afterwards. A 404 on cleanup is fine, the pet is already gone.
 
 ## UI
