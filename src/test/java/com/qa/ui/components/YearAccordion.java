@@ -34,6 +34,10 @@ public class YearAccordion {
     }
 
     private static SelenideElement panelFor(SelenideElement title) {
-        return $("#" + title.getAttribute("data-toggle-accordion"));
+        String panelId = title.getAttribute("data-toggle-accordion");
+        if (panelId == null || panelId.isBlank()) {
+            throw new IllegalStateException("accordion button has no data-toggle-accordion");
+        }
+        return $("#" + panelId);
     }
 }
